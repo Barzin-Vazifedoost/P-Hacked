@@ -1,4 +1,5 @@
 const HISTOGRAM_BIN_COUNT = 20
+const MAX_BINNED_P_VALUE = 0.999999
 
 function boxMullerRandom() {
   let u1 = 0
@@ -91,7 +92,8 @@ export function buildHistogramData(pValues, binCount = HISTOGRAM_BIN_COUNT) {
   })
 
   pValues.forEach((pValue) => {
-    const safeValue = Math.min(Math.max(pValue, 0), 0.999999)
+    // Keep a p-value of exactly 1.0 inside the final histogram bucket after flooring.
+    const safeValue = Math.min(Math.max(pValue, 0), MAX_BINNED_P_VALUE)
     const binIndex = Math.min(Math.floor(safeValue / binWidth), binCount - 1)
     bins[binIndex].count += 1
   })
