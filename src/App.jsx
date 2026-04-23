@@ -5,10 +5,10 @@ import { runSimulationBatch } from './utils/simulation'
 const DEFAULT_SIMULATION_COUNT = 1000
 const DEFAULT_SAMPLE_SIZE = 50
 
-function normalizePositiveInteger(value, fallback) {
+function normalizePositiveInteger(value, fallback, minimum = 1) {
   const parsedValue = Number.parseInt(value, 10)
 
-  if (!Number.isFinite(parsedValue) || parsedValue < 1) {
+  if (!Number.isFinite(parsedValue) || parsedValue < minimum) {
     return fallback
   }
 
@@ -41,7 +41,7 @@ function App() {
       simulationCount,
       DEFAULT_SIMULATION_COUNT,
     )
-    const nextSampleSize = normalizePositiveInteger(sampleSize, DEFAULT_SAMPLE_SIZE)
+    const nextSampleSize = normalizePositiveInteger(sampleSize, DEFAULT_SAMPLE_SIZE, 2)
 
     setSimulationCount(String(nextSimulationCount))
     setSampleSize(String(nextSampleSize))

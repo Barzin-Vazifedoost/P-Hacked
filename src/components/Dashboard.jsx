@@ -1,6 +1,8 @@
+import { Suspense, lazy } from 'react'
 import ControlsPanel from './ControlsPanel'
 import InsightsPanel from './InsightsPanel'
-import PValueChart from './PValueChart'
+
+const PValueChart = lazy(() => import('./PValueChart'))
 
 function Dashboard({ controls, insights, pValues, totalSimulations }) {
   return (
@@ -27,7 +29,17 @@ function Dashboard({ controls, insights, pValues, totalSimulations }) {
 
         <section className="grid flex-1 gap-6 xl:grid-cols-[19rem_minmax(0,1fr)_18rem]">
           <ControlsPanel {...controls} />
-          <PValueChart pValues={pValues} />
+          <Suspense
+            fallback={
+              <section className="rounded-3xl border border-white/10 bg-slate-900/80 p-6 shadow-2xl shadow-black/20">
+                <div className="flex h-full min-h-[380px] items-center justify-center rounded-2xl border border-dashed border-white/10 bg-slate-950/60 text-sm text-slate-400">
+                  Loading chart…
+                </div>
+              </section>
+            }
+          >
+            <PValueChart pValues={pValues} />
+          </Suspense>
           <InsightsPanel {...insights} />
         </section>
       </div>
